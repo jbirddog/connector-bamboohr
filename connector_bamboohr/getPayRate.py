@@ -1,3 +1,4 @@
+import json
 import requests
 
 class GetPayRate:
@@ -12,11 +13,19 @@ class GetPayRate:
         params = { 'fields': 'payRate', 'onlyCurrent': 'true' }
         auth = (self.api_key, 'x')
 
-        # TODO: error handling
-        response = requests.get(url, params, headers=headers, auth=auth)
+        try:
+            raw_response = requests.get(url, params, headers=headers, auth=auth)
+            parsed_response = json.loads(raw_response.text)
+            pay_rate = parsed_response['payRate']
+            pay_rate_parts = pay_rate.split(' ')
+            parsed_response['amount'] = pay_rate_parts[0]
+            parsed_response['currency'] = pay_rate_parts[1]
+            response = json.dumps(parsed_response)
+        except:
+            response = '{ "error": "Invalid Employee ID" }'
 
         return {
-            'response': response.text,
-            'status': 200,
+            'response': response,
+            'status': raw_response.status_code,
             'mimetype': 'application/json'
         }
