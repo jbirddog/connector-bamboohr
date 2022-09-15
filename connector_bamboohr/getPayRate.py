@@ -1,6 +1,17 @@
 import json
 import requests
 
+#
+# Sample response
+#
+
+# {
+#    "amount": "65000.00",
+#    "currency": "USD",
+#    "id": "4",
+#    "payRate": "65000.00 USD"
+# }
+
 class GetPayRate:
     def __init__(self, api_key: str, subdomain: str, employee_id: str):
         self.api_key = api_key
@@ -9,8 +20,8 @@ class GetPayRate:
 
     def execute(self):
         url = f'https://api.bamboohr.com/api/gateway.php/{self.subdomain}/v1/employees/{self.employee_id}'
-        headers = { 'Accept': 'application/json' }
-        params = { 'fields': 'payRate', 'onlyCurrent': 'true' }
+        headers = {'Accept': 'application/json'}
+        params = {'fields': 'payRate', 'onlyCurrent': 'true'}
         auth = (self.api_key, 'x')
 
         try:
